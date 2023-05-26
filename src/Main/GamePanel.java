@@ -76,14 +76,14 @@ public class GamePanel extends JPanel {
 
     }
 
-    public void setDirection(int direction){
+    public void setDirection(int direction) {
 
         this.platerDirection = direction;
         moving = true;
 
     }
 
-    public void setMoving(boolean moving){
+    public void setMoving(boolean moving) {
 
         this.moving = moving;
 
@@ -102,16 +102,16 @@ public class GamePanel extends JPanel {
 
     private void setAnimation() {
 
-        if(moving)
+        if (moving)
             playerAction = RUNNING;
         else
             playerAction = IDLE;
 
     }
 
-    public void updatePosition(){
+    public void updatePosition() {
 
-        if (moving){
+        if (moving) {
             switch (platerDirection) {
                 case LEFT -> xDelta -= 5;
                 case UP -> yDelta -= 5;
@@ -122,19 +122,16 @@ public class GamePanel extends JPanel {
 
     }
 
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-
+    public void updateGame() {
         updateAnimationTick();
-
         setAnimation();
         updatePosition();
-
-        g.drawImage(animations[playerAction][animationIndex], (int) xDelta, (int) yDelta, 256, 160, null);
-
     }
 
-
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(animations[playerAction][animationIndex], (int) xDelta, (int) yDelta, 256, 160, null);
+    }
 
 
 }
