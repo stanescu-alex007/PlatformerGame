@@ -9,25 +9,44 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.Buffer;
+
+import static utilz.Constants.PlayerConstants.*;
+import static utilz.Constants.Directions.*;
 
 
 public class GamePanel extends JPanel {
 
     private MouseInputs mouseInputs;
     private float xDelta = 100, yDelta = 100;
-    private BufferedImage img, subImg;
+    private BufferedImage img;
+    private BufferedImage[][] animations;
+    private int animationTick, animationIndex, animationSpeed = 15;
+    private int playerAction = IDLE;
+    private int platerDirection = -1;
+    private boolean moving = false;
 
     public GamePanel() {
 
         mouseInputs = new MouseInputs(this);
 
         importImg();
+        loadAnimations();
 
         setPanelSize();
         addKeyListener(new KeyboardInputs(this));
         addMouseListener(mouseInputs);
         addMouseMotionListener(mouseInputs);
+
+    }
+
+    private void loadAnimations() {
+
+        animations = new BufferedImage[9][6];
+
+        for (int j = 0; j < animations.length; j++)
+            for (int i = 0; i < animations[j].length; i++) {
+                animations[j][i] = img.getSubimage(i * 64, j * 40, 64, 40);
+            }
 
     }
 
@@ -39,6 +58,12 @@ public class GamePanel extends JPanel {
             img = ImageIO.read(is);
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
     }
@@ -51,25 +76,65 @@ public class GamePanel extends JPanel {
 
     }
 
-    public void changeXDelta(int value) {
-        this.xDelta += value;
+    public void setDirection(int direction){
+
+        this.platerDirection = direction;
+        moving = true;
+
     }
 
-    public void changeYDelta(int value) {
-        this.yDelta += value;
+    public void setMoving(boolean moving){
+
+        this.moving = moving;
+
     }
 
-    public void setRectPos(int x, int y) {
-        this.xDelta = x;
-        this.yDelta = y;
+    private void updateAnimationTick() {
+        animationTick++;
+        if (animationTick >= animationSpeed) {
+            animationTick = 0;
+            animationIndex++;
+            if (animationIndex >= GetSpriteAmount(playerAction)) {
+                animationIndex = 0;
+            }
+        }
+    }
+
+    private void setAnimation() {
+
+        if(moving)
+            playerAction = RUNNING;
+        else
+            playerAction = IDLE;
+
+    }
+
+    public void updatePosition(){
+
+        if (moving){
+            switch (platerDirection) {
+                case LEFT -> xDelta -= 5;
+                case UP -> yDelta -= 5;
+                case RIGHT -> xDelta += 5;
+                case DOWN -> yDelta += 5;
+            }
+        }
+
     }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        subImg = img.getSubimage(64, 8*40, 64, 40);
-        g.drawImage(subImg, (int)xDelta, (int)yDelta, 128, 80, null);
+        updateAnimationTick();
+
+        setAnimation();
+        updatePosition();
+
+        g.drawImage(animations[playerAction][animationIndex], (int) xDelta, (int) yDelta, 256, 160, null);
 
     }
+
+
+
 
 }
