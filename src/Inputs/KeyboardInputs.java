@@ -8,7 +8,8 @@ import java.awt.event.KeyListener;
 public class KeyboardInputs implements KeyListener {
 
     private GamePanel gamePanel;
-    public KeyboardInputs(GamePanel gamePanel){
+
+    public KeyboardInputs(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
     }
 
@@ -25,6 +26,7 @@ public class KeyboardInputs implements KeyListener {
             case KeyEvent.VK_A -> gamePanel.getGame().getPlayer().setLeft(true);
             case KeyEvent.VK_S -> gamePanel.getGame().getPlayer().setDown(true);
             case KeyEvent.VK_D -> gamePanel.getGame().getPlayer().setRight(true);
+            case KeyEvent.VK_SPACE -> gamePanel.getGame().getPlayer().setJump(true);
         }
 
     }
@@ -37,6 +39,7 @@ public class KeyboardInputs implements KeyListener {
             case KeyEvent.VK_A -> gamePanel.getGame().getPlayer().setLeft(false);
             case KeyEvent.VK_S -> gamePanel.getGame().getPlayer().setDown(false);
             case KeyEvent.VK_D -> gamePanel.getGame().getPlayer().setRight(false);
+            case KeyEvent.VK_SPACE -> gamePanel.getGame().getPlayer().setJump(false);
         }
 
     }
