@@ -1,5 +1,7 @@
 package entities;
 
+import utilz.LoadSave;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -19,10 +21,12 @@ public class Player extends Entity {
     private boolean left, up, right, down;
     private float playerSpeed = 2.0f;
 
-    public Player(float x, float y) {
-        super(x, y);
+    public Player(float x, float y, int width, int height) {
+        super(x, y, width, height);
         loadAnimations();
     }
+
+
 
     public void update() {
 
@@ -34,7 +38,7 @@ public class Player extends Entity {
 
     public void render(Graphics g) {
 
-        g.drawImage(animations[playerAction][animationIndex], (int) x, (int) y, 256, 160, null);
+        g.drawImage(animations[playerAction][animationIndex], (int) x, (int) y, width, height, null);
 
     }
 
@@ -77,18 +81,18 @@ public class Player extends Entity {
 
         moving = false;
 
-        if(left && !right){
+        if (left && !right) {
             x -= playerSpeed;
             moving = true;
-        }else if(right && !left){
+        } else if (right && !left) {
             x += playerSpeed;
             moving = true;
         }
 
-        if(up && !down){
+        if (up && !down) {
             y -= playerSpeed;
             moving = true;
-        }else if(down && !up){
+        } else if (down && !up) {
             y += playerSpeed;
             moving = true;
         }
@@ -96,39 +100,27 @@ public class Player extends Entity {
     }
 
     private void loadAnimations() {
-        InputStream is = getClass().getResourceAsStream("/player_sprites.png");
 
-        try {
-            BufferedImage img = ImageIO.read(is);
+        BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.PLAYER_ATLAS );
 
-            animations = new BufferedImage[9][6];
-            for (int j = 0; j < animations.length; j++) {
-                for (int i = 0; i < animations[j].length; i++) {
-                    animations[j][i] = img.getSubimage(i * 64, j * 40, 64, 40);
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+        animations = new BufferedImage[9][6];
+        for (int j = 0; j < animations.length; j++) {
+            for (int i = 0; i < animations[j].length; i++) {
+                animations[j][i] = img.getSubimage(i * 64, j * 40, 64, 40);
             }
         }
 
 
     }
 
-    public void resetDirBooleans(){
-         left = false;
-         right = false;
-         up = false;
-         down = false;
+    public void resetDirBooleans() {
+        left = false;
+        right = false;
+        up = false;
+        down = false;
     }
 
-    public void  setAttacking(boolean attacking){
+    public void setAttacking(boolean attacking) {
         this.attacking = attacking;
 
     }

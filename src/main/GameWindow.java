@@ -1,6 +1,4 @@
-package Main;
-
-import jdk.swing.interop.SwingInterOpUtils;
+package main;
 
 import javax.swing.*;
 import java.awt.event.WindowEvent;
@@ -25,7 +23,6 @@ public class GameWindow extends JFrame {
 
             @Override
             public void windowLostFocus(WindowEvent e) {
-                System.out.println("BYEE!");
                 gamePanel.getGame().windowFocusLost();
             }
         });
