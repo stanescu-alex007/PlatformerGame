@@ -1,7 +1,9 @@
 package utilz;
 
 import entities.Crabby;
+
 import static utilz.Constants.EnemyConstants.*;
+
 import main.Game;
 
 import javax.imageio.ImageIO;
@@ -45,7 +47,7 @@ public class LoadSave {
         return img;
     }
 
-    public static ArrayList<Crabby> GetCrabs(){
+    public static ArrayList<Crabby> GetCrabs() {
         BufferedImage img = GetSpriteAtlas(LEVEL_ONE_DATA);
         ArrayList<Crabby> list = new ArrayList<>();
 
@@ -54,7 +56,7 @@ public class LoadSave {
                 Color color = new Color(img.getRGB(i, j));
                 int value = color.getGreen();
                 if (value == CRABBY)
-                list.add(new Crabby(i * Game.TILES_SIZE, j * Game.TILES_SIZE));
+                    list.add(new Crabby(i * Game.TILES_SIZE, j * Game.TILES_SIZE));
             }
         return list;
 

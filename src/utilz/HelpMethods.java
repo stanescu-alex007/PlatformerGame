@@ -52,7 +52,7 @@ public class HelpMethods {
     public static float GetEntityYPositionUnderRoofOrAboveFloor(Rectangle2D.Float hitbox, float airSpeed) {
         int currentTile = (int) (hitbox.y / Game.TILES_SIZE);
         if (airSpeed > 0) {
-            //Fallin - touching floor
+            //Falling - touching floor
             int tileYPosition = currentTile * Game.TILES_SIZE;
             int yOffset = (int) (Game.TILES_SIZE - hitbox.height);
             return tileYPosition + yOffset - 1;
@@ -69,6 +69,19 @@ public class HelpMethods {
                 return false;
         return true;
 
+    }
+
+
+//    public static boolean IsFloor(Rectangle2D.Float hitbox, float xSpeed, int[][] lvlData) {
+//        return IsSolid(hitbox.x + xSpeed, hitbox.y + hitbox.height + 1, lvlData);
+//
+//    }
+
+    public static boolean IsFloor(Rectangle2D.Float hitbox, float xSpeed, int[][] lvlData) {
+        if (xSpeed > 0)
+            return IsSolid(hitbox.x + hitbox.width + xSpeed, hitbox.y + hitbox.height + 1, lvlData);
+        else
+            return IsSolid(hitbox.x + xSpeed, hitbox.y + hitbox.height + 1, lvlData);
     }
 
 }
