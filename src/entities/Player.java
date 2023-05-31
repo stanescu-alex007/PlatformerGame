@@ -13,7 +13,7 @@ import static utilz.HelpMethods.*;
 public class Player extends Entity {
 
     private BufferedImage[][] animations;
-    private int animationTick, animationIndex, animationSpeed = 15;
+    private int animationTick, animationIndex, animationSpeed = 25;
     private int playerAction = IDLE;
     private boolean moving = false, attacking = false;
     private boolean left, up, right, down, jump;
