@@ -1,8 +1,14 @@
 package utilz;
 
+import entities.Crabby;
 import main.Game;
 
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+
+import static utilz.Constants.EnemyConstants.CRABBY;
 
 public class HelpMethods {
 
@@ -26,12 +32,12 @@ public class HelpMethods {
         float xIndex = x / Game.TILES_SIZE;
         float yIndex = y / Game.TILES_SIZE;
 
-        return IsTyleSolid((int) xIndex, (int) yIndex, lvlData);
+        return IsTileSolid((int) xIndex, (int) yIndex, lvlData);
 
 
     }
 
-    public static boolean IsTyleSolid(int xTile, int yTile, int[][] lvlData) {
+    public static boolean IsTileSolid(int xTile, int yTile, int[][] lvlData) {
 
         int value = lvlData[yTile][xTile];
 
@@ -88,9 +94,9 @@ public class HelpMethods {
 
     public static boolean IsAllTileSWalkable(int xStart, int xEnd, int y, int[][] lvlData) {
         for (int i = 0; i < xEnd - xStart; i++) {
-            if (IsTyleSolid(xStart + i, y, lvlData))
+            if (IsTileSolid(xStart + i, y, lvlData))
                 return false;
-            if (!IsTyleSolid(xStart + i, y + 1, lvlData))
+            if (!IsTileSolid(xStart + i, y + 1, lvlData))
                 return false;
 
         }
@@ -106,6 +112,34 @@ public class HelpMethods {
             return IsAllTileSWalkable(secondXTile, firstXTile, yTile, lvlData);
         else
             return IsAllTileSWalkable(firstXTile, secondXTile, yTile, lvlData);
+    }
+
+    public static int[][] GetLevelData(BufferedImage img) {
+        int[][] lvlData = new int[img.getHeight()][img.getWidth()];
+
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getRed();
+                if (value >= 48)
+                    value = 0;
+                lvlData[j][i] = value;
+            }
+        return lvlData;
+    }
+
+    public static ArrayList<Crabby> GetCrabs(BufferedImage img) {
+        ArrayList<Crabby> list = new ArrayList<>();
+
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getGreen();
+                if (value == CRABBY)
+                    list.add(new Crabby(i * Game.TILES_SIZE, j * Game.TILES_SIZE));
+            }
+        return list;
+
     }
 
 }

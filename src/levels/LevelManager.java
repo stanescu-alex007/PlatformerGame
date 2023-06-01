@@ -1,6 +1,7 @@
 package levels;
 
 import main.Game;
+import utilz.HelpMethods;
 import utilz.LoadSave;
 
 import java.awt.*;
