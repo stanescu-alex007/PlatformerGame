@@ -1,5 +1,6 @@
 package ui;
 
+import gamestates.Gamestate;
 import gamestates.Playing;
 import main.Game;
 import utilz.LoadSave;
@@ -8,7 +9,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-import static utilz.Constants.UI.URMButtons.*;
+import static utilz.Constants.UI.URMButtons.URM_SIZE;
 
 public class LevelCompletedOverlay {
 
@@ -32,6 +33,9 @@ public class LevelCompletedOverlay {
     }
 
     public void draw(Graphics g) {
+        g.setColor(new Color(0, 0, 0, 200));
+        g.fillRect(0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
+
         g.drawImage(img, bgX, bgY, bgW, bgH, null);
         next.draw(g);
         menu.draw(g);
@@ -60,11 +64,16 @@ public class LevelCompletedOverlay {
 
     public void mouseReleased(MouseEvent e) {
         if (isIn(menu, e)) {
-            if (menu.isMousePressed())
-                System.out.println("Menu!");
+            if (menu.isMousePressed()){
+                playing.resetAll();
+                Gamestate.state = Gamestate.MENU;
+            }
+
         } else if ((isIn(next, e)))
-            if (next.isMousePressed())
-                System.out.println("Next!");
+            if (next.isMousePressed()){
+                playing.loadNextLevel();
+            }
+
 
             menu.resetBools();
             next.resetBools();

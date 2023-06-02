@@ -1,20 +1,13 @@
 package utilz;
 
-import entities.Crabby;
-
-import static utilz.Constants.EnemyConstants.*;
-
-import main.Game;
-
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
+
 
 public class LoadSave {
     public static final String PLAYER_ATLAS = "player_sprites.png";
@@ -65,7 +58,7 @@ public class LoadSave {
         File[] filesSorted = new File[files.length];
 
         for (int i = 0; i < filesSorted.length; i++)
-            for (int j = 0; i < files.length; j++) {
+            for (int j = 0; j < files.length; j++) {
                 if (files[j].getName().equals((i + 1) + ".png"))
                     filesSorted[i] = files[j];
 
@@ -73,15 +66,15 @@ public class LoadSave {
 
         BufferedImage[] imgs = new BufferedImage[filesSorted.length];
 
-        for (int i = 0; i < imgs.length; i++) {
+        for (int i = 0; i < imgs.length; i++)
             try {
                 imgs[i] = ImageIO.read(filesSorted[i]);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
 
-        return null;
+
+        return imgs;
     }
 
 

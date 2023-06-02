@@ -8,7 +8,6 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
-
 import static utilz.Constants.PlayerConstants.*;
 import static utilz.HelpMethods.*;
 
@@ -64,6 +63,13 @@ public class Player extends Entity {
         loadAnimations();
         initHitbox(x, y, (int) (20 * Game.SCALE), (int) (27 * Game.SCALE));
         initAttackBox();
+    }
+
+    public void setSpawn(Point spawn){
+        this.x = spawn.x;
+        this.y = spawn.y;
+        hitbox.x = x;
+        hitbox.y = y;
     }
 
     private void initAttackBox() {

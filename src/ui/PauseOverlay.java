@@ -9,9 +9,10 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-import static utilz.Constants.UI.PauseButtons.*;
-import static utilz.Constants.UI.URMButtons.*;
-import static utilz.Constants.UI.VolumeButtons.*;
+import static utilz.Constants.UI.PauseButtons.SOUND_SIZE;
+import static utilz.Constants.UI.URMButtons.URM_SIZE;
+import static utilz.Constants.UI.VolumeButtons.SLIDER_WIDTH;
+import static utilz.Constants.UI.VolumeButtons.VOLUME_HEIGHT;
 
 public class PauseOverlay {
 

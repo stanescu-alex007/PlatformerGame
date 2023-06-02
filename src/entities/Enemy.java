@@ -1,13 +1,13 @@
 package entities;
 
-import gamestates.Playing;
 import main.Game;
 
 import java.awt.geom.Rectangle2D;
 
+import static utilz.Constants.Directions.LEFT;
+import static utilz.Constants.Directions.RIGHT;
 import static utilz.Constants.EnemyConstants.*;
 import static utilz.HelpMethods.*;
-import static utilz.Constants.Directions.*;
 
 public abstract class Enemy extends Entity {
     protected int animationIndex, enemyState, enemyType;
