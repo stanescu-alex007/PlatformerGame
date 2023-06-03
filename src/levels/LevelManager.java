@@ -36,7 +36,10 @@ public class LevelManager {
         game.getPlaying().getEnemyManager().loadEnemies(newLevel);
         game.getPlaying().getPlayer().loadLvlData(newLevel.getLevelData());
         game.getPlaying().setMaxLevelOffset(newLevel.getLvlOffset());
+        game.getPlaying().getObjectManager().loadObjects(newLevel);
     }
+
+
 
     private void buildAllLevels() {
         BufferedImage[] allLevels = LoadSave.GetAllLevels();
