@@ -78,7 +78,15 @@ public class Player extends Entity {
         updateHealthBar();
 
         if (currentHealth <= 0) {
-            playing.setGameOver(true);
+            if (state != DEAD) {
+                state = DEAD;
+                animationTick = 0;
+                animationIndex = 0;
+                playing.setPlayerDying(true);
+            } else if (animationIndex == GetSpriteAmount(DEAD) - 1 && animationTick >= ANIMATION_SPEED - 1) {
+                playing.setGameOver(true);
+            } else updateAnimationTick();
+
             return;
         }
 
@@ -88,8 +96,8 @@ public class Player extends Entity {
 
         if (moving)
             checkPotionTouched();
-            checkSpikesTouched();
-            tileY = (int)(hitbox.y / Game.TILES_SIZE);
+        checkSpikesTouched();
+        tileY = (int) (hitbox.y / Game.TILES_SIZE);
 
         if (attacking)
             checkAttack();
