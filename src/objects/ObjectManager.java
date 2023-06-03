@@ -1,5 +1,6 @@
 package objects;
 
+import entities.Player;
 import gamestates.Playing;
 import levels.Level;
 import utilz.LoadSave;
@@ -15,13 +16,22 @@ import static utilz.Constants.ObjectConstants.*;
 public class ObjectManager {
 
     private Playing playing;
-    private BufferedImage[][] potionsImg, containerImgs;
+    private BufferedImage[][] potionsImgs, containerImgs;
+    private BufferedImage spikeImg;
     private ArrayList<Potion> potions;
     private ArrayList<GameContainer> containers;
+    private ArrayList<Spike> spikes;
 
     public ObjectManager(Playing playing) {
         this.playing = playing;
         loadImgs();
+    }
+
+    public void checkSpikesTouched(Player p){
+        for (Spike s : spikes)
+            if (s.getHitbox().intersects(p.getHitbox()))
+                p.kill();
+
     }
 
     public void checkObjectTouched(Rectangle2D.Float hitbox) {
@@ -43,7 +53,7 @@ public class ObjectManager {
 
     public void checkObjectHit(Rectangle2D.Float attackBox) {
         for (GameContainer gc : containers)
-            if (gc.isActive()) {
+            if (gc.isActive() && !gc.doAnimation) {
                 if (gc.getHitbox().intersects(attackBox)) {
                     gc.setAnimation(true);
 
@@ -58,17 +68,18 @@ public class ObjectManager {
     }
 
     public void loadObjects(Level newLevel) {
-        potions = newLevel.getPotions();
-        containers = newLevel.getContainers();
+        potions = new ArrayList<>(newLevel.getPotions());
+        containers = new ArrayList<>(newLevel.getContainers());
+        spikes = newLevel.getSpikes();
     }
 
     private void loadImgs() {
         BufferedImage potionSprite = LoadSave.GetSpriteAtlas(LoadSave.POTION_ATLAS);
-        potionsImg = new BufferedImage[2][7];
+        potionsImgs = new BufferedImage[2][7];
 
-        for (int j = 0; j < potionsImg.length; j++)
-            for (int i = 0; i < potionsImg[j].length; i++)
-                potionsImg[j][i] = potionSprite.getSubimage(12 * i, 16 * j, 12, 16);
+        for (int j = 0; j < potionsImgs.length; j++)
+            for (int i = 0; i < potionsImgs[j].length; i++)
+                potionsImgs[j][i] = potionSprite.getSubimage(12 * i, 16 * j, 12, 16);
 
         BufferedImage containerSprite = LoadSave.GetSpriteAtlas(LoadSave.CONTAINER_ATLAS);
         containerImgs = new BufferedImage[2][8];
@@ -76,6 +87,8 @@ public class ObjectManager {
         for (int j = 0; j < containerImgs.length; j++)
             for (int i = 0; i < containerImgs[j].length; i++)
                 containerImgs[j][i] = containerSprite.getSubimage(40 * i, 30 * j, 40, 30);
+
+        spikeImg = LoadSave.GetSpriteAtlas(LoadSave.TRAP_ATLAS);
     }
 
     public void update() {
@@ -92,6 +105,12 @@ public class ObjectManager {
     public void draw(Graphics g, int xLvlOffset) {
         drawPotions(g, xLvlOffset);
         drawContainers(g, xLvlOffset);
+        drawTraps(g, xLvlOffset);
+    }
+
+    private void drawTraps(Graphics g, int xLvlOffset) {
+        for (Spike s : spikes)
+            g.drawImage(spikeImg, (int) (s.getHitbox().x - xLvlOffset), (int) (s.getHitbox().y - s.getyDrawOffset()), SPIKE_WIDTH, SPIKE_HEIGHT, null);
     }
 
     private void drawContainers(Graphics g, int xLvlOffset) {
@@ -112,18 +131,20 @@ public class ObjectManager {
                 int type = 0;
                 if (p.getObjType() == RED_POTION)
                     type = 1;
-                g.drawImage(potionsImg[type][p.animationIndex], (int) (p.getHitbox().x - p.getxDrawOffset() - xLvlOffset), (int) (p.getHitbox().y - p.getyDrawOffset()), POTION_WIDTH, POTION_HEIGHT, null);
+                g.drawImage(potionsImgs[type][p.animationIndex], (int) (p.getHitbox().x - p.getxDrawOffset() - xLvlOffset), (int) (p.getHitbox().y - p.getyDrawOffset()), POTION_WIDTH, POTION_HEIGHT, null);
 
             }
 
     }
 
     public void resetAllObjects() {
+        loadObjects(playing.getLevelManager().getCurrentLevel());
 
         for (Potion p : potions)
             p.reset();
         for (GameContainer gc : containers)
             gc.reset();
+
     }
 
 

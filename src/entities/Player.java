@@ -86,13 +86,17 @@ public class Player extends Entity {
 
         if (moving)
             checkPotionTouched();
-
+            checkSpikesTouched();
 
         if (attacking)
             checkAttack();
         updateAnimationTick();
         setAnimation();
 
+    }
+
+    private void checkSpikesTouched() {
+        playing.checkSpikesTouched(this);
     }
 
     private void checkPotionTouched() {
@@ -126,11 +130,11 @@ public class Player extends Entity {
         g.drawImage(animations[state][animationIndex], (int) (hitbox.x - xDrawOffset) - lvlOffset + flipX, (int) (hitbox.y - yDrawOffset), width * flipW, height, null);
         //drawHitbox(g, lvlOffset);
         //drawAttackBox(g, lvlOffset);
-        drawuUI(g);
+        drawUI(g);
 
     }
 
-    private void drawuUI(Graphics g) {
+    private void drawUI(Graphics g) {
         g.drawImage(statusBarImg, statusBarX, statusBarY, statusBarWidth, statusBarHeight, null);
         g.setColor(Color.red);
         g.fillRect(healthBarXStart + statusBarX, healthBarYStart + statusBarY, healthWidth, healthBarHeight);
@@ -267,6 +271,11 @@ public class Player extends Entity {
             currentHealth = maxHealth;
     }
 
+
+    public void kill() {
+        currentHealth = 0;
+    }
+
     public void changePower(int value) {
         System.out.println("Added power!");
     }
@@ -337,4 +346,5 @@ public class Player extends Entity {
             inAir = true;
 
     }
+
 }

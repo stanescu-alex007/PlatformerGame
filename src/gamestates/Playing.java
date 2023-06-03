@@ -129,7 +129,7 @@ public class Playing extends State implements Statemethods {
         levelManager.draw(g, xLvlOffset);
         player.render(g, xLvlOffset);
         enemyManager.draw(g, xLvlOffset);
-        objectManager.draw(g,xLvlOffset);
+        objectManager.draw(g, xLvlOffset);
 
         if (paused) {
             g.setColor(new Color(0, 0, 0, 150));
@@ -161,7 +161,7 @@ public class Playing extends State implements Statemethods {
         this.gameOver = gameOver;
     }
 
-    public void checkObjectHit(Rectangle2D.Float attackBox){
+    public void checkObjectHit(Rectangle2D.Float attackBox) {
         objectManager.checkObjectHit(attackBox);
     }
 
@@ -169,9 +169,12 @@ public class Playing extends State implements Statemethods {
         enemyManager.checkEnemyHit(attackBox);
     }
 
-    public void checkPotionTouched(Rectangle2D.Float hitbox){
+    public void checkPotionTouched(Rectangle2D.Float hitbox) {
         objectManager.checkObjectTouched(hitbox);
+    }
 
+    public void checkSpikesTouched(Player p) {
+        objectManager.checkSpikesTouched(p);
     }
 
     @Override
@@ -268,5 +271,10 @@ public class Playing extends State implements Statemethods {
     public ObjectManager getObjectManager() {
         return objectManager;
     }
+
+    public LevelManager getLevelManager() {
+        return levelManager;
+    }
+
 
 }
