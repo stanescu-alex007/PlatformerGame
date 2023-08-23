@@ -21,7 +21,7 @@ public class AudioPlayer {
 
     private Clip[] songs, effects;
     private int currentSongId;
-    private float volume = 0.5f;
+    private float volume = 1f;
     private boolean songMute, effectMute;
     private Random random = new Random();
 
@@ -29,6 +29,7 @@ public class AudioPlayer {
     public AudioPlayer() {
         loadSongs();
         loadEffects();
+        playSong(MENU_1);
     }
 
     private void loadSongs() {
@@ -44,7 +45,9 @@ public class AudioPlayer {
         effects = new Clip[effectNames.length];
 
         for (int i = 0; i < effects.length; i++)
-            songs[i] = getClip(effectNames[i]);
+            effects[i] = getClip(effectNames[i]);
+
+        updateEffectsVolume();
 
     }
 
@@ -63,14 +66,53 @@ public class AudioPlayer {
         return null;
     }
 
+    public void setVolume(float volume) {
+        this.volume = volume;
+        updateSongVolume();
+        updateEffectsVolume();
+    }
+
+    public void stopSong() {
+        if (songs[currentSongId].isActive())
+            songs[currentSongId].stop();
+    }
+
+    public void setLevelSong(int lvlIndex) {
+        if (lvlIndex % 2 == 0)
+            playSong(LEVEL_1);
+        else playSong(LEVEL_2);
+    }
+
+    public void lvlCompleted() {
+        stopSong();
+        playEffect(LVL_COMPLETED);
+
+    }
+
+    public void playAttackSound() {
+        int start = 4;
+        start += random.nextInt(3);
+        playEffect(start);
+
+    }
+
     public void playEffect(int effect) {
+        effects[effect].setMicrosecondPosition(0);
+        effects[effect].start();
+
     }
 
     public void playSong(int song) {
+        stopSong();
+
+        currentSongId = song;
+        updateSongVolume();
+        songs[currentSongId].setMicrosecondPosition(0);
+        songs[currentSongId].loop(Clip.LOOP_CONTINUOUSLY);
 
     }
 
-    public void toogleSongMute() {
+    public void toggleSongMute() {
         this.songMute = !songMute;
         for (Clip c : songs) {
             BooleanControl booleanControl = (BooleanControl) c.getControl(BooleanControl.Type.MUTE);
@@ -79,7 +121,7 @@ public class AudioPlayer {
         }
     }
 
-    public void toogleEffectMute() {
+    public void toggleEffectMute() {
         this.effectMute = !effectMute;
         for (Clip c : effects) {
             BooleanControl booleanControl = (BooleanControl) c.getControl(BooleanControl.Type.MUTE);
