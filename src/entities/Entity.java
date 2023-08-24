@@ -55,5 +55,9 @@ public abstract class Entity {
         return animationIndex;
     }
 
+    public int getCurrentHealth(){
+        return currentHealth;
+    }
+
 
 }
