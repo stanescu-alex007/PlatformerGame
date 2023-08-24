@@ -185,9 +185,13 @@ public class Playing extends State implements Statemethods {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (!gameOver)
+        if (!gameOver) {
             if (e.getButton() == MouseEvent.BUTTON1)
                 player.setAttacking(true);
+            else if (e.getButton() == MouseEvent.BUTTON3)
+                player.powerAttack();
+        }
+
     }
 
     @Override
@@ -197,7 +201,7 @@ public class Playing extends State implements Statemethods {
                 pauseOverlay.mousePressed(e);
             else if (lvlCompleted)
                 levelCompletedOverlay.mousePressed(e);
-        }else{
+        } else {
             gameOverOverlay.mousePressed(e);
         }
     }
@@ -209,7 +213,7 @@ public class Playing extends State implements Statemethods {
                 pauseOverlay.mouseReleased(e);
             else if (lvlCompleted)
                 levelCompletedOverlay.mouseReleased(e);
-        }else{
+        } else {
             gameOverOverlay.mouseReleased(e);
         }
     }
@@ -221,7 +225,7 @@ public class Playing extends State implements Statemethods {
                 pauseOverlay.mouseMoved(e);
             else if (lvlCompleted)
                 levelCompletedOverlay.mouseMoved(e);
-        }else{
+        } else {
             gameOverOverlay.mouseMoved(e);
         }
     }
