@@ -105,9 +105,14 @@ public abstract class Enemy extends Entity {
     protected void checkEnemyHit(Rectangle2D.Float attackBox, Player player) {
         if (attackBox.intersects(player.hitbox))
             player.changeHealth(-GetEnemyDmg(enemyType));
+        else {
+            if (enemyType == SHARK)
+                return;
+        }
         attackChecked = true;
 
     }
+
 
     protected void updateAnimationTick() {
         animationTick++;
@@ -148,4 +153,17 @@ public abstract class Enemy extends Entity {
     public boolean isActive() {
         return active;
     }
+
+        public int flipX() {
+        if (walkDir == RIGHT)
+            return width;
+        else return 0;
+    }
+
+    public int flipW() {
+        if (walkDir == RIGHT)
+            return -1;
+        else return 1;
+    }
+
 }

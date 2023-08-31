@@ -14,8 +14,9 @@ import static utilz.Constants.EnemyConstants.*;
 public class EnemyManager {
 
     private Playing playing;
-    private BufferedImage[][] crabbyArray;
+    private BufferedImage[][] crabbyArray, sharkArray;
     private ArrayList<Crabby> crabbies = new ArrayList<>();
+    private ArrayList<Shark> sharks = new ArrayList<>();
 
     public EnemyManager(Playing playing) {
         this.playing = playing;
@@ -25,6 +26,8 @@ public class EnemyManager {
 
     public void loadEnemies(Level level) {
         crabbies = level.getCrabs();
+        sharks = level.getSharks();
+        System.out.println("size of sharks: " + sharks.size());
 
     }
 
@@ -35,24 +38,45 @@ public class EnemyManager {
                 c.update(lvlData, player);
                 isAnyActive = true;}
         }
+        for (Shark s : sharks){
+            if (s.isActive()){
+                s.update(lvlData, player);
+                isAnyActive = true;}
+        }
         if (!isAnyActive)
             playing.setLevelCompleted(true);
     }
 
     public void draw(Graphics g, int xLvlOffset) {
         drawCrabs(g, xLvlOffset);
+        drawSharks(g, xLvlOffset);
+
+    }
+
+    private void drawSharks(Graphics g, int xLvlOffset) {
+        for (Shark s : sharks)
+
+            if (s.isActive()) {
+                g.drawImage(sharkArray[s.getEnemyState()][s.getAnimationIndex()],
+                        (int) s.getHitbox().x - xLvlOffset - SHARK_DRAWOFFSET_X + s.flipX(),
+                        (int) s.getHitbox().y - SHARK_DRAWOFFSET_Y,
+                        SHARK_WIDTH * s.flipW(),
+                        SHARK_HEIGHT, null);
+               // s.drawHitbox(g, xLvlOffset);
+               // s.drawAttackBox(g, xLvlOffset);
+            }
     }
 
     private void drawCrabs(Graphics g, int xLvlOffset) {
         for (Crabby c : crabbies)
             if (c.isActive()) {
-                g.drawImage(crabbyArray[c.getEnemyState()][c.genAnimationIndex()],
+                g.drawImage(crabbyArray[c.getEnemyState()][c.getAnimationIndex()],
                         (int) c.getHitbox().x - xLvlOffset - CRABBY_DRAWOFFSET_X + c.flipX(),
                         (int) c.getHitbox().y - CRABBY_DRAWOFFSET_Y,
                         CRABBY_WIDTH * c.flipW(),
                         CRABBY_HEIGHT, null);
-                //c.drawHitbox(g, xLvlOffset);
-                //c.drawAttackBox(g, xLvlOffset);
+               // c.drawHitbox(g, xLvlOffset);
+               // c.drawAttackBox(g, xLvlOffset);
             }
     }
 
@@ -64,6 +88,13 @@ public class EnemyManager {
                     c.hurt(10);
                     return;
                 }
+        for (Shark s : sharks)
+            if (s.getCurrentHealth() > 0)
+            if (s.isActive())
+                if (attackBox.intersects(s.getHitbox())) {
+                    s.hurt(10);
+                    return;
+                }
     }
 
     private void loadEnemyImgs() {
@@ -72,11 +103,19 @@ public class EnemyManager {
         for (int j = 0; j < crabbyArray.length; j++)
             for (int i = 0; i < crabbyArray[j].length; i++)
                 crabbyArray[j][i] = temp.getSubimage(i * CRABBY_WIDTH_DEFAULT, j * CRABBY_HEIGHT_DEFAULT, CRABBY_WIDTH_DEFAULT, CRABBY_HEIGHT_DEFAULT);
+
+        sharkArray = new BufferedImage[5][8];
+        BufferedImage tempShark = LoadSave.GetSpriteAtlas(LoadSave.SHARK_ATLAS);
+        for (int j = 0; j < sharkArray.length; j++)
+            for (int i = 0; i < sharkArray.length; i++)
+                sharkArray[j][i] = tempShark.getSubimage(i * SHARK_WIDTH_DEFAULT, j * SHARK_HEIGHT_DEFAULT, SHARK_WIDTH_DEFAULT, SHARK_HEIGHT_DEFAULT);
     }
 
     public void resetAllEnemies(){
         for (Crabby c : crabbies)
             c.resetEnemy();
+        for (Shark shark : sharks)
+            shark.resetEnemy();
     }
 
 }

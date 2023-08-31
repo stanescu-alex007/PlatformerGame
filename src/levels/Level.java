@@ -1,6 +1,7 @@
 package levels;
 
 import entities.Crabby;
+import entities.Shark;
 import main.Game;
 import objects.Cannon;
 import objects.GameContainer;
@@ -20,6 +21,7 @@ public class Level {
     private BufferedImage img;
     private int[][] lvlData;
     private ArrayList<Crabby> crabs;
+    private ArrayList<Shark> sharks;
     private ArrayList<Potion> potions;
     private ArrayList<Spike> spikes;
     private ArrayList<GameContainer> containers;
@@ -70,6 +72,7 @@ public class Level {
 
     private void createEnemies() {
         crabs = GetCrabs(img);
+        sharks = GetSharks(img);
     }
 
     private void createLevelData() {
@@ -90,6 +93,10 @@ public class Level {
 
     public ArrayList<Crabby> getCrabs() {
         return crabs;
+    }
+
+    public ArrayList<Shark> getSharks(){
+        return sharks;
     }
 
     public Point getPlayerSpawn() {

@@ -1,6 +1,7 @@
 package utilz;
 
 import entities.Crabby;
+import entities.Shark;
 import main.Game;
 import objects.*;
 
@@ -10,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import static utilz.Constants.EnemyConstants.CRABBY;
+import static utilz.Constants.EnemyConstants.SHARK;
 import static utilz.Constants.ObjectConstants.*;
 
 public class HelpMethods {
@@ -161,6 +163,21 @@ public class HelpMethods {
                 int value = color.getGreen();
                 if (value == CRABBY)
                     list.add(new Crabby(i * Game.TILES_SIZE, j * Game.TILES_SIZE));
+            }
+        return list;
+
+    }
+
+    public static ArrayList<Shark> GetSharks(BufferedImage img){
+
+        ArrayList<Shark> list = new ArrayList<>();
+
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getGreen();
+                if (value == SHARK)
+                    list.add(new Shark(i * Game.TILES_SIZE, j * Game.TILES_SIZE));
             }
         return list;
 

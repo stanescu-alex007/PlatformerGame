@@ -51,7 +51,7 @@ public abstract class Entity {
         return state;
     }
 
-    public int genAnimationIndex() {
+    public int getAnimationIndex() {
         return animationIndex;
     }
 
