@@ -94,42 +94,26 @@ public class Constants {
         public static final int SHARK_DRAWOFFSET_X = (int)(8 * Game.SCALE);
         public static final int SHARK_DRAWOFFSET_Y = (int)(6 * Game.SCALE);
 
-        public static int GetSpriteAmount(int enemyType, int enemyState) {
 
-            switch (enemyType) {
-                case CRABBY:
-                    switch (enemyState) {
-                        case IDLE -> {
-                            return 9;
-                        }
-                        case RUNNING -> {
-                            return 6;
-                        }
-                        case ATTACK -> {
-                            return 7;
-                        }
-                        case HIT -> {
-                            return 4;
-                        }
-                        case DEAD -> {
-                            return 5;
-                        }
-                    }
-                case SHARK:
-                    switch (enemyState) {
-                        case IDLE, ATTACK -> {
-                            return 8;
-                        }
-                        case RUNNING -> {
-                            return 6;
-                        }
-                        case HIT -> {
-                            return 4;
-                        }
-                        case DEAD -> {
-                            return 5;
-                        }
-                    }
+        public static int GetSpriteAmount(int enemy_type, int enemy_state) {
+            switch (enemy_state) {
+
+                case IDLE: {
+                    if (enemy_type == CRABBY)
+                        return 9;
+                    else if (enemy_type == SHARK)
+                        return 8;
+                }
+                case RUNNING:
+                    return 6;
+                case ATTACK:
+                    if (enemy_type == SHARK)
+                        return 8;
+                    return 7;
+                case HIT:
+                    return 4;
+                case DEAD:
+                    return 5;
             }
 
             return 0;

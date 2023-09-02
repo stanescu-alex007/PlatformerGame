@@ -107,15 +107,15 @@ public class EnemyManager {
         sharkArray = new BufferedImage[5][8];
         BufferedImage tempShark = LoadSave.GetSpriteAtlas(LoadSave.SHARK_ATLAS);
         for (int j = 0; j < sharkArray.length; j++)
-            for (int i = 0; i < sharkArray.length; i++)
+            for (int i = 0; i < sharkArray[j].length; i++)
                 sharkArray[j][i] = tempShark.getSubimage(i * SHARK_WIDTH_DEFAULT, j * SHARK_HEIGHT_DEFAULT, SHARK_WIDTH_DEFAULT, SHARK_HEIGHT_DEFAULT);
     }
 
     public void resetAllEnemies(){
         for (Crabby c : crabbies)
             c.resetEnemy();
-        for (Shark shark : sharks)
-            shark.resetEnemy();
+        for (Shark s : sharks)
+            s.resetEnemy();
     }
 
 }

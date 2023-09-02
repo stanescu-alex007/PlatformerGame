@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import static utilz.Constants.Projectiles.*;
 import static utilz.HelpMethods.CanCannonSeePlayer;
+import static utilz.HelpMethods.IsSightClear;
 import static utilz.HelpMethods.IsProjectileHittingLevel;
 import static utilz.Constants.ObjectConstants.*;
 
