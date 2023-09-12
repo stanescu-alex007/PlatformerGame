@@ -6,7 +6,6 @@ import levels.Level;
 import main.Game;
 import utilz.LoadSave;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -14,7 +13,6 @@ import java.util.ArrayList;
 
 import static utilz.Constants.Projectiles.*;
 import static utilz.HelpMethods.CanCannonSeePlayer;
-import static utilz.HelpMethods.IsSightClear;
 import static utilz.HelpMethods.IsProjectileHittingLevel;
 import static utilz.Constants.ObjectConstants.*;
 
@@ -29,6 +27,8 @@ public class ObjectManager {
     private ArrayList<Spike> spikes;
     private ArrayList<Cannon> cannons;
     private ArrayList<Projectile> projectiles = new ArrayList<>();
+
+    private Level level;
 
     public ObjectManager(Playing playing) {
         this.playing = playing;
@@ -149,7 +149,7 @@ public class ObjectManager {
                     if (isPlayerInRange(c, player))
                         if (isPlayerInFrontOfCannon(c, player))
                             if (CanCannonSeePlayer(lvlData, player.getHitbox(), c.getHitbox(), c.getTileY()))
-                                c.setAnimation(true);
+                                    c.setAnimation(true);
 
 
             c.update();
@@ -157,6 +157,7 @@ public class ObjectManager {
                 shootCannon(c);
         }
     }
+
 
     private void shootCannon(Cannon c) {
         c.setAnimation(true);

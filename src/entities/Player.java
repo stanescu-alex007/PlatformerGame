@@ -83,6 +83,7 @@ public class Player extends Entity {
         hitbox.y = y;
     }
 
+
     private void initAttackBox() {
         attackBox = new Rectangle2D.Float(x, y, (int) (20 * Game.SCALE), (int) (20 * Game.SCALE));
         resetAttackBox();
@@ -100,11 +101,24 @@ public class Player extends Entity {
                 animationIndex = 0;
                 playing.setPlayerDying(true);
                 playing.getGame().getAudioPlayer().playEffect(AudioPlayer.DIE);
+
+                if (!IsEntityOnFloor(hitbox, lvlData)) {
+                    inAir = true;
+                    airSpeed = 0;
+                }
+
             } else if (animationIndex == GetSpriteAmount(DEAD) - 1 && animationTick >= ANIMATION_SPEED - 1) {
                 playing.setGameOver(true);
                 playing.getGame().getAudioPlayer().stopSong();
                 playing.getGame().getAudioPlayer().playEffect(AudioPlayer.GAMEOVER);
             } else updateAnimationTick();
+
+            if (inAir)
+                if (CanMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, lvlData)) {
+                    hitbox.y += airSpeed;
+                    airSpeed += GRAVITY;
+                } else
+                    inAir = false;
 
             return;
         }
@@ -116,6 +130,7 @@ public class Player extends Entity {
         if (moving) {
             checkPotionTouched();
             checkSpikesTouched();
+            checkInsideWater();
             tileY = (int) (hitbox.y / Game.TILES_SIZE);
             if (powerAttackActive) {
                 powerAttackTick++;
@@ -131,6 +146,11 @@ public class Player extends Entity {
         updateAnimationTick();
         setAnimation();
 
+    }
+
+    private void checkInsideWater(){
+        if (IsEntityInWater(hitbox, playing.getLevelManager().getCurrentLevel().getLevelData()))
+            currentHealth = 0;
     }
 
     private void checkSpikesTouched() {
