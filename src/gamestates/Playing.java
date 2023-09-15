@@ -35,13 +35,17 @@ public class Playing extends State implements Statemethods {
     private int rightBorder = (int) (0.8 * Game.GAME_WIDTH);
     private int maxLvlOffsetX;
 
-    private BufferedImage backgroundImg, bigCloud, smallCloud;
+    private BufferedImage backgroundImg, bigCloud, smallCloud, shipImgs[];
     private int[] smallCloudsPos;
     private Random rnd = new Random();
 
     private boolean gameOver;
     private boolean lvlCompleted;
     private boolean playerDying;
+
+    private boolean drawShip = true;
+    private int shipAni, shipTick, shipDir = 1;
+    private float shipHeightDelta, shipHeightChange = 0.05f * Game.SCALE;
 
     public Playing(Game game) {
         super(game);
@@ -54,6 +58,11 @@ public class Playing extends State implements Statemethods {
         for (int i = 0; i < smallCloudsPos.length; i++)
             smallCloudsPos[i] = (int) (90 * Game.SCALE) + rnd.nextInt((int) (100 * Game.SCALE));
 
+        shipImgs = new BufferedImage[4];
+        BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.SHIP);
+        for (int i = 0; i < shipImgs.length; i++)
+            shipImgs[i] = temp.getSubimage(i * 78, 0, 78, 72);
+
         calculateLvlOffset();
         loadStartLevel();
     }
@@ -63,6 +72,7 @@ public class Playing extends State implements Statemethods {
         levelManager.loadNextLevel();
         player.setSpawn(levelManager.getCurrentLevel().getPlayerSpawn());
         resetAll();
+        drawShip = false;
 
     }
 
@@ -107,9 +117,29 @@ public class Playing extends State implements Statemethods {
             player.update();
             enemyManager.update(levelManager.getCurrentLevel().getLevelData(), player);
             checkCloseToBorder();
+            if (drawShip)
+                updateShipAni();
         }
 
 
+    }
+
+    private void updateShipAni() {
+        shipTick++;
+        if (shipTick >= 35) {
+            shipTick = 0;
+            shipAni++;
+            if (shipAni >= 4)
+                shipAni = 0;
+        }
+
+        shipHeightDelta += shipHeightChange * shipDir;
+        shipHeightDelta = Math.max(Math.min(10 * Game.SCALE, shipHeightDelta), 0);
+
+        if (shipHeightDelta == 0)
+            shipDir = 1;
+        else if (shipHeightDelta == 10 * Game.SCALE)
+            shipDir = -1;
     }
 
     private void checkCloseToBorder() {
@@ -132,6 +162,9 @@ public class Playing extends State implements Statemethods {
         g.drawImage(backgroundImg, 0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
 
         drawClouds(g);
+
+        if (drawShip)
+            g.drawImage(shipImgs[shipAni], (int) (100 * Game.SCALE) - xLvlOffset, (int) ((288 * Game.SCALE) + shipHeightDelta), (int) (78 * Game.SCALE), (int) (72 * Game.SCALE), null);
 
         levelManager.draw(g, xLvlOffset);
         player.render(g, xLvlOffset);
