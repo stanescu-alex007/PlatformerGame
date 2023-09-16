@@ -1,18 +1,9 @@
 package utilz;
 
-import entities.Crabby;
-import entities.Shark;
 import main.Game;
 import objects.*;
-
-import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
-import static utilz.Constants.EnemyConstants.CRABBY;
-import static utilz.Constants.EnemyConstants.SHARK;
-import static utilz.Constants.ObjectConstants.*;
 
 public class HelpMethods {
 
@@ -168,8 +159,5 @@ public class HelpMethods {
             return IsAllTileSWalkable(firstXTile, secondXTile, yTile, lvlData);
 
     }
-    //............................
-
-    //............................
 
 }

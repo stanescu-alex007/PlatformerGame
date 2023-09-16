@@ -10,11 +10,7 @@ import entities.Crabby;
 import entities.Shark;
 import main.Game;
 
-import objects.Cannon;
-import objects.GameContainer;
-
-import objects.Potion;
-import objects.Spike;
+import objects.*;
 
 import static utilz.Constants.EnemyConstants.*;
 import static utilz.Constants.ObjectConstants.*;
@@ -30,6 +26,7 @@ public class Level {
     private ArrayList<Spike> spikes = new ArrayList<>();
     private ArrayList<GameContainer> containers = new ArrayList<>();
     private ArrayList<Cannon> cannons = new ArrayList<>();
+    private ArrayList<BackgroundTree> trees = new ArrayList<>();
 
 
     private int lvlTilesWide;
@@ -81,6 +78,7 @@ public class Level {
             case BOX, BARREL -> containers.add(new GameContainer(x * Game.TILES_SIZE, y * Game.TILES_SIZE, blueValue));
             case SPIKE -> spikes.add(new Spike(x * Game.TILES_SIZE, y * Game.TILES_SIZE, SPIKE));
             case CANNON_LEFT, CANNON_RIGHT -> cannons.add(new Cannon(x * Game.TILES_SIZE, y * Game.TILES_SIZE, blueValue));
+            case TREE_ONE, TREE_TWO, TREE_THREE -> trees.add(new BackgroundTree(x * Game.TILES_SIZE, y * Game.TILES_SIZE, blueValue));
 
         }
     }
@@ -129,6 +127,10 @@ public class Level {
 
     public ArrayList<Cannon> getCannons() {
         return cannons;
+    }
+
+    public ArrayList<BackgroundTree> getTrees() {
+        return trees;
     }
 
 
