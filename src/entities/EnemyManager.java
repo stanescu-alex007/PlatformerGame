@@ -59,7 +59,7 @@ public class EnemyManager {
             if (s.isActive()) {
                 g.drawImage(sharkArray[s.getEnemyState()][s.getAnimationIndex()],
                         (int) s.getHitbox().x - xLvlOffset - SHARK_DRAWOFFSET_X + s.flipX(),
-                        (int) s.getHitbox().y - SHARK_DRAWOFFSET_Y,
+                        (int) s.getHitbox().y - SHARK_DRAWOFFSET_Y + (int) s.getPushDrawOffset(),
                         SHARK_WIDTH * s.flipW(),
                         SHARK_HEIGHT, null);
                // s.drawHitbox(g, xLvlOffset);
@@ -72,7 +72,7 @@ public class EnemyManager {
             if (c.isActive()) {
                 g.drawImage(crabbyArray[c.getEnemyState()][c.getAnimationIndex()],
                         (int) c.getHitbox().x - xLvlOffset - CRABBY_DRAWOFFSET_X + c.flipX(),
-                        (int) c.getHitbox().y - CRABBY_DRAWOFFSET_Y,
+                        (int) c.getHitbox().y - CRABBY_DRAWOFFSET_Y + (int) c.getPushDrawOffset(),
                         CRABBY_WIDTH * c.flipW(),
                         CRABBY_HEIGHT, null);
                // c.drawHitbox(g, xLvlOffset);
@@ -85,14 +85,14 @@ public class EnemyManager {
             if (c.getCurrentHealth() > 0)
             if (c.isActive())
                 if (attackBox.intersects(c.getHitbox())) {
-                    c.hurt(10);
+                    c.hurt(20);
                     return;
                 }
         for (Shark s : sharks)
             if (s.getCurrentHealth() > 0)
             if (s.isActive())
                 if (attackBox.intersects(s.getHitbox())) {
-                    s.hurt(10);
+                    s.hurt(20);
                     return;
                 }
     }

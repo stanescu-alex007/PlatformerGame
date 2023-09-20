@@ -1,16 +1,18 @@
 package entities;
 
+import gamestates.Playing;
 import main.Game;
 
-import java.awt.*;
+
 import java.awt.geom.Rectangle2D;
 
-import static utilz.Constants.Directions.RIGHT;
 import static utilz.Constants.EnemyConstants.*;
+import static utilz.HelpMethods.IsFloor;
 
 public class Crabby extends Enemy {
 
     private int attackBoxOffsetX;
+    private Playing playing;
 
     public Crabby(float x, float y) {
         super(x, y, CRABBY_WIDTH, CRABBY_HEIGHT, CRABBY);
@@ -44,7 +46,10 @@ public class Crabby extends Enemy {
         else {
             switch (state) {
                 case IDLE:
-                    newState(RUNNING);
+                    if (IsFloor(hitbox, lvlData))
+                        newState(RUNNING);
+                    else
+                        inAir = true;
                     break;
                 case RUNNING:
 
@@ -63,22 +68,19 @@ public class Crabby extends Enemy {
                         checkEnemyHit(attackBox, player);
                     break;
                 case HIT:
+                    if (animationIndex <= GetSpriteAmount(enemyType, state) - 2)
+                        pushBack(pushBackDir, lvlData, 2f);
+                    updatePushBackDrawOffset();
+                    checkSpikesTouched();
                     break;
             }
         }
-
     }
 
-    public int flipX() {
-        if (walkDir == RIGHT)
-            return width;
-        else return 0;
+    private void checkSpikesTouched() {
+        playing.checkSpikesTouched(this);
     }
 
-    public int flipW() {
-        if (walkDir == RIGHT)
-            return -1;
-        else return 1;
-    }
+
 
 }

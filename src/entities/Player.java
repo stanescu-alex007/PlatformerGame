@@ -125,7 +125,12 @@ public class Player extends Entity {
 
         updateAttackBox();
 
-        updatePosition();
+        if (state == HIT) {
+            if (animationIndex <= GetSpriteAmount(state) - 3)
+                pushBack(pushBackDir, lvlData, 1.25f);
+            updatePushBackDrawOffset();
+        } else
+            updatePosition();
 
         if (moving) {
             checkPotionTouched();

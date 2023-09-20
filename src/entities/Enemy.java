@@ -5,8 +5,7 @@ import main.Game;
 import java.awt.geom.Rectangle2D;
 
 import static utilz.Constants.*;
-import static utilz.Constants.Directions.LEFT;
-import static utilz.Constants.Directions.RIGHT;
+import static utilz.Constants.Directions.*;
 import static utilz.Constants.EnemyConstants.*;
 import static utilz.HelpMethods.*;
 
@@ -86,7 +85,15 @@ public abstract class Enemy extends Entity {
 
     protected boolean isPlayerCloseForAttack(Player player) {
         int absValue = (int) Math.abs(player.hitbox.x - hitbox.x);
-        return absValue <= attackDistance;
+        switch (enemyType) {
+            case CRABBY -> {
+                return absValue <= attackDistance;
+            }
+            case SHARK -> {
+                return absValue <= attackDistance * 2;
+            }
+        }
+        return false;
     }
 
     protected void newState(int enemyState) {
@@ -99,7 +106,15 @@ public abstract class Enemy extends Entity {
         currentHealth -= amount;
         if (currentHealth <= 0)
             newState(DEAD);
-        else newState(HIT);
+        else {
+            newState(HIT);
+            if (walkDir == LEFT)
+                pushBackDir = RIGHT;
+            else
+                pushBackDir = LEFT;
+            pushBackOffsetDir = UP;
+            pushDrawOffset = 0;
+        }
     }
 
     protected void checkEnemyHit(Rectangle2D.Float attackBox, Player player) {
@@ -148,13 +163,16 @@ public abstract class Enemy extends Entity {
         newState(IDLE);
         active = true;
         airSpeed = 0;
+
+        pushDrawOffset = 0;
+
     }
 
     public boolean isActive() {
         return active;
     }
 
-        public int flipX() {
+    public int flipX() {
         if (walkDir == RIGHT)
             return width;
         else return 0;
@@ -164,6 +182,10 @@ public abstract class Enemy extends Entity {
         if (walkDir == RIGHT)
             return -1;
         else return 1;
+    }
+
+    public float getPushDrawOffset() {
+        return pushDrawOffset;
     }
 
 }

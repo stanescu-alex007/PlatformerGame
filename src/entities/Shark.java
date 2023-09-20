@@ -1,6 +1,5 @@
 package entities;
 
-import gamestates.Playing;
 import main.Game;
 
 import java.awt.geom.Rectangle2D;
@@ -75,6 +74,9 @@ public class Shark extends Enemy{
                     }
                     break;
                 case HIT:
+                    if (animationIndex <= GetSpriteAmount(enemyType, state) - 2)
+                        pushBack(pushBackDir, lvlData, 2f);
+                    updatePushBackDrawOffset();
                     break;
             }
         }

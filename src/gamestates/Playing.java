@@ -1,6 +1,7 @@
 package gamestates;
 
 import effects.Rain;
+import entities.Enemy;
 import entities.EnemyManager;
 import entities.Player;
 import levels.LevelManager;
@@ -237,7 +238,11 @@ public class Playing extends State implements Statemethods {
 
     public void checkSpikesTouched(Player p) {
         objectManager.checkSpikesTouched(p);
+
+    }public void checkSpikesTouched(Enemy e) {
+        objectManager.checkSpikesTouched(e);
     }
+
 
     @Override
     public void mouseClicked(MouseEvent e) {

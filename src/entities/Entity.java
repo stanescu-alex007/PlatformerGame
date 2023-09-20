@@ -5,6 +5,9 @@ import main.Game;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
+import static utilz.Constants.Directions.*;
+import static utilz.HelpMethods.CanMoveHere;
+
 public abstract class Entity {
 
     protected float x, y;
@@ -19,6 +22,10 @@ public abstract class Entity {
     protected Rectangle2D.Float attackBox;
     protected float walkSpeed = 1.0f * Game.SCALE;
 
+    protected int pushBackDir;
+    protected float pushDrawOffset;
+    protected int pushBackOffsetDir = UP;
+
 
     public Entity(float x, float y, int width, int height) {
         this.x = x;
@@ -26,6 +33,32 @@ public abstract class Entity {
         this.width = width;
         this.height = height;
 
+    }
+
+    protected void updatePushBackDrawOffset() {
+        float speed = 0.95f;
+        float limit = -30f;
+
+        if (pushBackOffsetDir == UP) {
+            pushDrawOffset -= speed;
+            if (pushDrawOffset <= limit)
+                pushBackOffsetDir = DOWN;
+        } else {
+            pushDrawOffset += speed;
+            if (pushDrawOffset >= 0)
+                pushDrawOffset = 0;
+        }
+    }
+
+    protected void pushBack(int pushBackDir, int[][] lvlData, float speedMulti) {
+        float xSpeed = 0;
+        if (pushBackDir == LEFT)
+            xSpeed = -walkSpeed;
+        else
+            xSpeed = walkSpeed;
+
+        if (CanMoveHere(hitbox.x + xSpeed * speedMulti, hitbox.y, hitbox.width, hitbox.height, lvlData))
+            hitbox.x += xSpeed * speedMulti;
     }
 
     protected void drawAttackBox(Graphics g, int xLvlOffset) {
