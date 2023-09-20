@@ -1,5 +1,6 @@
 package gamestates;
 
+import effects.Rain;
 import entities.EnemyManager;
 import entities.Player;
 import levels.LevelManager;
@@ -29,6 +30,7 @@ public class Playing extends State implements Statemethods {
     private GameOverOverlay gameOverOverlay;
     private LevelCompletedOverlay levelCompletedOverlay;
     private boolean paused = false;
+    private Rain rain;
 
     private int xLvlOffset;
     private int leftBorder = (int) (0.2 * Game.GAME_WIDTH);
@@ -42,6 +44,7 @@ public class Playing extends State implements Statemethods {
     private boolean gameOver;
     private boolean lvlCompleted;
     private boolean playerDying;
+    private boolean drawRain;
 
     private boolean drawShip = true;
     private int shipAni, shipTick, shipDir = 1;
@@ -65,6 +68,7 @@ public class Playing extends State implements Statemethods {
 
         calculateLvlOffset();
         loadStartLevel();
+        setDrawRainBoolean();
     }
 
     public void loadNextLevel() {
@@ -98,6 +102,8 @@ public class Playing extends State implements Statemethods {
         gameOverOverlay = new GameOverOverlay(this);
         levelCompletedOverlay = new LevelCompletedOverlay(this);
 
+        rain = new Rain();
+
     }
 
     @Override
@@ -112,6 +118,8 @@ public class Playing extends State implements Statemethods {
         } else if (playerDying) {
             player.update();
         } else {
+            if (drawRain)
+                rain.update(xLvlOffset);
             levelManager.update();
             objectManager.update(levelManager.getCurrentLevel().getLevelData(), player);
             player.update();
@@ -163,6 +171,9 @@ public class Playing extends State implements Statemethods {
 
         drawClouds(g);
 
+        if (drawRain)
+            rain.draw(g, xLvlOffset);
+
         if (drawShip)
             g.drawImage(shipImgs[shipAni], (int) (100 * Game.SCALE) - xLvlOffset, (int) ((288 * Game.SCALE) + shipHeightDelta), (int) (78 * Game.SCALE), (int) (72 * Game.SCALE), null);
 
@@ -194,9 +205,18 @@ public class Playing extends State implements Statemethods {
         paused = false;
         lvlCompleted = false;
         playerDying = false;
+
+        drawRain = false;
+        setDrawRainBoolean();
+
         player.resetAll();
         enemyManager.resetAllEnemies();
         objectManager.resetAllObjects();
+    }
+
+    private void setDrawRainBoolean() {
+        if (rnd.nextFloat() >= 0.8f)
+            drawRain = true;
     }
 
     public void setGameOver(boolean gameOver) {

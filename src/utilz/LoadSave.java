@@ -38,6 +38,7 @@ public class LoadSave {
     public static final String SHIP = "ship.png";
     public static final String TREE_ONE_ATLAS = "tree_one_atlas.png";
     public static final String TREE_TWO_ATLAS = "tree_two_atlas.png";
+    public static final String RAIN_PARTICLE = "rain_particle.png";
 
 
     public static BufferedImage GetSpriteAtlas(String fileName) {
