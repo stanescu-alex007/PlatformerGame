@@ -1,5 +1,6 @@
 package utilz;
 
+import entities.Enemy;
 import main.Game;
 
 import javax.xml.crypto.dsig.spec.XSLTTransformParameterSpec;

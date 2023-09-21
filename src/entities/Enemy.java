@@ -1,5 +1,6 @@
 package entities;
 
+import gamestates.Playing;
 import main.Game;
 
 import java.awt.geom.Rectangle2D;
@@ -20,6 +21,8 @@ public abstract class Enemy extends Entity {
     protected boolean active = true;
     protected boolean attackChecked;
 
+    private Playing playing;
+
     public Enemy(float x, float y, int width, int height, int enemyType) {
         super(x, y, width, height);
         this.state = enemyType;
@@ -32,6 +35,15 @@ public abstract class Enemy extends Entity {
         if (!IsEntityOnFloor(hitbox, lvlData))
             inAir = true;
         firstUpdate = false;
+    }
+
+    protected void inAirChecks(int[][] lvlData, Playing playing) {
+        if (state != HIT && state != DEAD) {
+            updateInAir(lvlData);
+            playing.getObjectManager().checkSpikesTouched(this);
+            if (IsEntityInWater(hitbox, lvlData))
+                hurt(maxHealth);
+        }
     }
 
     protected void updateInAir(int[][] lvlData) {

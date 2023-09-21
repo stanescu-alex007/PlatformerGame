@@ -12,7 +12,8 @@ import static utilz.HelpMethods.IsFloor;
 public class Crabby extends Enemy {
 
     private int attackBoxOffsetX;
-    private Playing playing;
+
+
 
     public Crabby(float x, float y) {
         super(x, y, CRABBY_WIDTH, CRABBY_HEIGHT, CRABBY);
@@ -26,26 +27,27 @@ public class Crabby extends Enemy {
         attackBoxOffsetX = (int) (Game.SCALE * 30);
     }
 
-    public void update(int[][] lvlData, Player player) {
-        updateBehavior(lvlData, player);
+    public void update(int[][] lvlData, Playing playing) {
+        updateBehavior(lvlData, playing);
         updateAnimationTick();
         updateAttackBox();
-
     }
+
 
     private void updateAttackBox() {
         attackBox.x = hitbox.x - attackBoxOffsetX;
         attackBox.y = hitbox.y;
     }
 
-    private void updateBehavior(int[][] lvlData, Player player) {
+    private void updateBehavior(int[][] lvlData, Playing playing) {
         if (firstUpdate)
             firstUpdateCheck(lvlData);
-        if (inAir)
-            updateInAir(lvlData);
-        else {
+        if (inAir) {
+            inAirChecks(lvlData, playing);
+        } else {
             switch (state) {
                 case IDLE:
+
                     if (IsFloor(hitbox, lvlData))
                         newState(RUNNING);
                     else
@@ -53,9 +55,9 @@ public class Crabby extends Enemy {
                     break;
                 case RUNNING:
 
-                    if (canSeePlayer(lvlData, player)) {
-                        turnTowardsPlayer(player);
-                        if (isPlayerCloseForAttack(player))
+                    if (canSeePlayer(lvlData, playing.getPlayer())) {
+                        turnTowardsPlayer(playing.getPlayer());
+                        if (isPlayerCloseForAttack(playing.getPlayer()))
                             newState(ATTACK);
                     }
 
@@ -65,22 +67,16 @@ public class Crabby extends Enemy {
                     if (animationIndex == 0)
                         attackChecked = false;
                     if (animationIndex == 3 && !attackChecked)
-                        checkEnemyHit(attackBox, player);
+                        checkEnemyHit(attackBox, playing.getPlayer());
                     break;
                 case HIT:
                     if (animationIndex <= GetSpriteAmount(enemyType, state) - 2)
-                        pushBack(pushBackDir, lvlData, 2f);
+                        pushBack(pushBackDir, lvlData, 0.8f);
                     updatePushBackDrawOffset();
-                    checkSpikesTouched();
                     break;
             }
         }
     }
-
-    private void checkSpikesTouched() {
-        playing.checkSpikesTouched(this);
-    }
-
 
 
 }

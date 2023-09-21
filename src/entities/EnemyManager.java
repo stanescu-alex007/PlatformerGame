@@ -31,16 +31,16 @@ public class EnemyManager {
 
     }
 
-    public void update(int[][] lvlData, Player player) {
+    public void update(int[][] lvlData) {
         boolean isAnyActive = false;
         for (Crabby c : crabbies){
             if (c.isActive()){
-                c.update(lvlData, player);
+                c.update(lvlData, playing);
                 isAnyActive = true;}
         }
         for (Shark s : sharks){
             if (s.isActive()){
-                s.update(lvlData, player);
+                s.update(lvlData, playing);
                 isAnyActive = true;}
         }
         if (!isAnyActive)
@@ -117,5 +117,6 @@ public class EnemyManager {
         for (Shark s : sharks)
             s.resetEnemy();
     }
+
 
 }

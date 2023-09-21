@@ -1,5 +1,6 @@
 package entities;
 
+import gamestates.Playing;
 import main.Game;
 
 import java.awt.geom.Rectangle2D;
@@ -27,8 +28,8 @@ public class Shark extends Enemy{
         attackBoxOffsetX = (int) (Game.SCALE * 20);
     }
 
-    public void update(int[][] lvlData, Player player) {
-        updateBehavior(lvlData, player);
+    public void update(int[][] lvlData, Playing playing) {
+        updateBehavior(lvlData, playing);
         updateAnimationTick();
         updateAttackBoxFlip();
 
@@ -44,11 +45,11 @@ public class Shark extends Enemy{
 
     }
 
-    private void updateBehavior(int[][] lvlData, Player player) {
+    private void updateBehavior(int[][] lvlData, Playing playing) {
         if (firstUpdate)
             firstUpdateCheck(lvlData);
         if (inAir)
-            updateInAir(lvlData);
+            inAirChecks(lvlData, playing);
         else {
             switch (state) {
                 case IDLE:
@@ -56,9 +57,9 @@ public class Shark extends Enemy{
                     break;
                 case RUNNING:
 
-                    if (canSeePlayer(lvlData, player)) {
-                        turnTowardsPlayer(player);
-                        if (isPlayerCloseForAttack(player))
+                    if (canSeePlayer(lvlData, playing.getPlayer())) {
+                        turnTowardsPlayer(playing.getPlayer());
+                        if (isPlayerCloseForAttack(playing.getPlayer()))
                             newState(ATTACK);
                     }
 
@@ -69,13 +70,13 @@ public class Shark extends Enemy{
                         attackChecked = false;
                     else if (animationIndex == 3){
                         if (!attackChecked)
-                            checkEnemyHit(attackBox, player);
-                        attackMove(lvlData, player);
+                            checkEnemyHit(attackBox, playing.getPlayer());
+                        attackMove(lvlData, playing.getPlayer());
                     }
                     break;
                 case HIT:
                     if (animationIndex <= GetSpriteAmount(enemyType, state) - 2)
-                        pushBack(pushBackDir, lvlData, 2f);
+                        pushBack(pushBackDir, lvlData, 1f);
                     updatePushBackDrawOffset();
                     break;
             }

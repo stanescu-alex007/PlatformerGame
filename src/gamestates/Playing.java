@@ -1,6 +1,7 @@
 package gamestates;
 
 import effects.Rain;
+import entities.Crabby;
 import entities.Enemy;
 import entities.EnemyManager;
 import entities.Player;
@@ -122,9 +123,9 @@ public class Playing extends State implements Statemethods {
             if (drawRain)
                 rain.update(xLvlOffset);
             levelManager.update();
-            objectManager.update(levelManager.getCurrentLevel().getLevelData(), player);
+            objectManager.update(levelManager.getCurrentLevel().getLevelData());
             player.update();
-            enemyManager.update(levelManager.getCurrentLevel().getLevelData(), player);
+            enemyManager.update(levelManager.getCurrentLevel().getLevelData());
             checkCloseToBorder();
             if (drawShip)
                 updateShipAni();
@@ -239,8 +240,11 @@ public class Playing extends State implements Statemethods {
     public void checkSpikesTouched(Player p) {
         objectManager.checkSpikesTouched(p);
 
-    }public void checkSpikesTouched(Enemy e) {
-        objectManager.checkSpikesTouched(e);
+    }
+
+    public void checkSpikesTouched(Crabby c) {
+        objectManager.checkSpikesTouched(c);
+
     }
 
 

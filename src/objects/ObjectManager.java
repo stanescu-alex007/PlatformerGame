@@ -133,7 +133,7 @@ public class ObjectManager {
 
     }
 
-    public void update(int[][] lvlData, Player player) {
+    public void update(int[][] lvlData) {
         updateBackgroundTrees();
         for (Potion p : potions)
             if (p.active)
@@ -143,8 +143,8 @@ public class ObjectManager {
             if (gc.active)
                 gc.update();
 
-        updateCannons(lvlData, player);
-        updateProjectiles(lvlData, player);
+        updateCannons(lvlData, playing.getPlayer());
+        updateProjectiles(lvlData, playing.getPlayer());
 
     }
 
